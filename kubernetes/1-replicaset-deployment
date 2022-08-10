@@ -1,15 +1,18 @@
 //**********create a deployment, delete a pod, delete a replicaset,update the version*********
 a-implement deployment
-b-delete some stuff
-c-Update Container Image via Deployment
-//command to deploy:  
 first time
 kubectl create -f nginx-deployment-withrolling.yaml
 
+b-delete some stuff
 kubectl get all,   
 kubectl delete pod <name-of-pod>
 kubectl delete rs <name-replicaset>
-kubectl describe pods
+
+c-Update Container Image via Deployment
+//command to deploy:  
+if you do modification do
+  kubectl apply -f nginx-deployment-withrolling.yaml
+  
 kubectl describe rs
 kubectl describe deployment
 -------------------------------------------------------------------
@@ -41,8 +44,7 @@ spec:
   -----------------------------------------------------------------------change the version to 1.17
   - image: nginx:1.17
   -----------------------------------------------------------------------
-  if you do modification do
-  kubectl apply -f nginx-deployment-withrolling.yaml
+  
   
   kubectl get rs --watch
   kubectl get rs
