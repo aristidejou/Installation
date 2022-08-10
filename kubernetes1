@@ -1,4 +1,7 @@
 //**********create a deployment, delete a pod, delete a replicaset,update the version*********
+a-implement deployment
+b-delete some stuff
+c-Update Container Image via Deployment
 //command to deploy:  
 first time
 kubectl create -f nginx-deployment-withrolling.yaml
