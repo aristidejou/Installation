@@ -69,14 +69,14 @@ register                        0
 define host{
 use                          linux-box                   
 host_name                    LinuxShellTips          
-alias                        Ubuntu 20.04           
+alias                        host1           
 address                      private@IP-host         ; Remote Linux host IP address
 }
 
 define host{
 use                          linux-box
 host_name                    LinuxShellTips1
-alias                        Ubuntu 20.04
+alias                        host2
 address                      private@IP-host      ; Remote Linux host IP address
 }
 
