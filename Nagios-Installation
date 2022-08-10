@@ -1,0 +1,124 @@
+*****on MASTER******
+sudo apt update
+sudo apt install wget unzip curl openssl build-essential libgd-dev libssl-dev libapache2-mod-php php-gd php apache2 -y
+sudo systemctl status apache2
+wget https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.6.tar.gz
+sudo tar -zxvf nagios-4.4.6.tar.gz
+cd nagios-4.4.6
+sudo ./configure
+sudo make all
+sudo make install-groups-users
+sudo usermod -a -G nagios www-data
+sudo make install
+sudo make install-init
+sudo make install-commandmode
+sudo make install-config
+sudo make install-webconf
+sudo a2enmod rewrite
+sudo a2enmod cgi
+sudo systemctl restart apache2
+sudo htpasswd -c /usr/local/nagios/etc/htpasswd.users admin
+sudo wget https://nagios-plugins.org/download/nagios-plugins-2.3.3.tar.gz
+sudo tar -zxvf nagios-plugins-2.3.3.tar.gz
+cd nagios-plugins-2.3.3/
+sudo ./configure --with-nagios-user=nagios --with-nagios-group=nagios
+sudo make
+sudo make install
+sudo /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+sudo systemctl start nagios
+sudo systemctl enable nagios
+
+*********check the browser
+http://server-ip/nagios
+
+//Installing Nagios NRPE in Remote Linux Host
+//You first need to access your targeted Linux host via SSH as demonstrated below.
+//copy id_rsa.pub of master to host
+ssh ubuntu@private-IP-host
+sudo apt install nagios-plugins nagios-nrpe-server -y
+
+//add this line with Nagios server IP
+allowed_hosts=127.0.0.1,private@IP Nagios
+-------
+sudo service nagios-nrpe-server restart
+cd /usr/local/nagios/etc/
+sudo touch hosts.cfg services.cfg
+sudo vi /usr/local/nagios/etc/nagios.cfg
+//add this line
+cfg_file=/usr/local/nagios/etc/hosts.cfg
+cfg_file=/usr/local/nagios/etc/services.cfg
+
+sudo vi /usr/local/nagios/etc/hosts.cfg
+## Default Linux Host Template ##
+define host{
+name                            linux-box               
+use                             generic-host           
+check_period                    24x7
+check_interval                  5
+retry_interval                  1
+max_check_attempts              10
+check_command                   check-host-alive
+notification_period             24x7
+notification_interval           30
+notification_options            d,r
+contact_groups                  admins
+register                        0                       
+}
+
+## Default
+define host{
+use                          linux-box                   
+host_name                    LinuxShellTips          
+alias                        Ubuntu 20.04           
+address                      private@IP-host         ; Remote Linux host IP address
+}
+
+define host{
+use                          linux-box
+host_name                    LinuxShellTips1
+alias                        Ubuntu 20.04
+address                      private@IP-host      ; Remote Linux host IP address
+}
+
+
+sudo vi /usr/local/nagios/etc/services.cfg
+define service{
+    use                     generic-service	
+    host_name		        LinuxShellTips
+	service_description	    CPU Load
+	check_command		    check_nrpe!check_load
+	}
+define service{
+    use                     generic-service	
+    host_name		        LinuxShellTips
+	service_description	    Local Disk
+	check_command		    check_nrpe!check_disk
+	}
+define service{
+    use                     generic-service	
+    host_name		        LinuxShellTips
+	service_description	    Total Processes
+	check_command		    check_nrpe!check_total_procs
+	}
+define service{
+    use                     generic-service	
+    host_name		        LinuxShellTips
+	service_description	    Current Users
+	check_command		    check_nrpe!check_users
+	}
+  
+  sudo vi /usr/local/nagios/etc/objects/commands.cfg 
+  //add this
+  define command{
+        command_name check_nrpe
+        command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+        }
+ -----------------
+ sudo /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg   
+ sudo htpasswd -c /usr/local/nagios/etc/htpasswd.users admin
+ sudo vi /usr/local/nagios/etc/cgi.cfg
+ authorized_for_all_services=nagiosadmin,admin
+authorized_for_all_hosts=nagiosadmin,admin
+-----------------------------------
+sudo service nagios restart
+   
