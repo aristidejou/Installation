@@ -125,3 +125,18 @@ authorized_for_all_hosts=nagiosadmin,admin
 -----------------------------------
 sudo service nagios restart
    
+--------------------------
+in templates.cfg 
+you can change check_interval , retry_interval
+
+in commands.cfg
+/usr/local/nagios/etc/objects/commands.cfg
+
+**check if http is running**
+/usr/local/nagios/etc/services.cfg
+define service{
+    use                     generic-service
+    host_name                   LinuxShellTips
+        service_description         HTTP
+        check_command               check_http
+        }
