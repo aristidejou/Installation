@@ -82,6 +82,7 @@ address                      private@IP-host      ; Remote Linux host IP address
 
 
 sudo vi /usr/local/nagios/etc/services.cfg
+#on host1 check service :  CPU Load, Local Disk
 define service{
     use                     generic-service	
     host_name		        LinuxShellTips
@@ -94,15 +95,17 @@ define service{
 	service_description	    Local Disk
 	check_command		    check_nrpe!check_disk
 	}
+	
+#on host2 check service :Total Processes,  LinuxShellTips1
 define service{
     use                     generic-service	
-    host_name		        LinuxShellTips
+    host_name		        LinuxShellTips1
 	service_description	    Total Processes
 	check_command		    check_nrpe!check_total_procs
 	}
 define service{
     use                     generic-service	
-    host_name		        LinuxShellTips
+    host_name		        LinuxShellTips1
 	service_description	    Current Users
 	check_command		    check_nrpe!check_users
 	}
