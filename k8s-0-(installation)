@@ -1,4 +1,4 @@
-***********Installation
+***********Installation***MASTER=MEDIUM ****NODE=MICRO**********************************
 run this on both--master and slave
 sudo su
 apt-get update
