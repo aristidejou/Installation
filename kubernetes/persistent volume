@@ -1,0 +1,39 @@
+1. Create a persistent volume
+vi demo-pv.yaml
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+   name: demo-pv
+   labels:
+     type: local
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+kubectl apply -f demo-pv.yaml
+
+2. create a persistent volume claim
+vi demo-pvc.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: demo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+kubectl apply -f demo-pvc.yaml
+kubectl get pv
+kubectl get pvc
+
+3. create a secret “xyzIsthebest”
+4. Taint one of the nodes of the cluster
