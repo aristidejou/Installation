@@ -1,0 +1,81 @@
+download the link from https://www.terraform.io/downloads.html
+
+curl -O https://releases.hashicorp.com/terraform/1.2.4/terraform_1.2.4_linux_amd64.zip
+sudo apt-get install unzip
+unzip terraform_1.2.4_linux_amd64.zip
+sudo mv terraform /usr/local/bin
+terraform version
+
+vi main.tf
+provider "aws" {
+region = "us-east-2" 
+ access_key = "AKIASTDBTX7FKAATR2MI"
+ secret_key = "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" 
+}
+             resource "aws_instance" "web" {
+  ami           = "ami-02f3416038bdb17fb"
+  instance_type = "t2.micro"
+}
+
+terraform init
+terraform plan
+terraform apply
+terraform destroy
+*****************************************************Create a new EC2 instance with an Elastic IP,add name on the machine
+provider "aws" {
+region = "us-east-2"
+ access_key = "AKIASTDBTX7FKAATR2MI"
+ secret_key = "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"
+}
+resource "aws_instance" "ubuntu" {
+  ami           = "ami-02f3416038bdb17fb"
+  instance_type = "t2.micro"
+  tags = {
+   Name = "New-EC2"
+ }
+}
+resource "aws_eip" "elasticip" {
+ instance = aws_instance.ubuntu.id
+}
+output "EIP" {
+ value = aws_eip.elasticip.public_ip
+}
+
+terraform plan
+terroform apply
+terraform destroy
+***************************************************************create 1 EC2 IN OHIO AND THE SECOND IN VIRGINIA
+provider "aws" {
+region = "us-east-2"
+ access_key = "AKIASTDBTX7FKAATR2MI"
+ secret_key = "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"
+}
+
+provider "aws" {
+  alias  = "usa"
+region = "us-east-1"
+ access_key = "AKIASTDBTX7FKAATR2MI"
+ secret_key = "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"
+}
+
+resource "aws_instance" "ohio" {
+  ami           = "ami-02f3416038bdb17fb"
+  instance_type = "t2.micro"
+  tags = {
+   Name = "hello-ohio"
+ }
+}
+
+
+resource "aws_instance" "virginia" {
+  ami           = "ami-052efd3df9dad4825"
+  instance_type = "t2.micro"
+  provider = aws.usa
+  tags = {
+   Name = "hello-virginia"
+ }
+}
+
+TO CHECK THE SYNTAXE = terraform validate
+terraform plan
+terraform apply
