@@ -1,0 +1,49 @@
+******************nginx deployment with 3 replica*****************
+
+vi deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+
+kubectl apply -f deployment.yaml
+kubectl get rs
+kubectl get pods
+kubectl get pods -o wide// see pods with ip Address
+curl @ip //Among the 3 ip@ you will see the nginx page
+-------------------------------------------------------------------------------
+-*********************Create a service of type NodePort for nginx deployment
+
+kubectl create service nodeport nginx --tcp=80:80
+kubectl get svc
+curl 10.104.30.99 you will see the nginx page or go to browser @ip-master:port-nodeport
+--------------------------------------------------------------------------------
+
+****************************Change the replicas to 5 for the deployment
+
+kubectl scale --replicas=5 deployment/nginx-deployment
+kubectl get deployment
+
+************************
+kubectl create service clusterIp nginx --tcp=80:80
+
+kubectl delete service nginx
+kubectl create service clusterip nginx --tcp=80:80
+
+
