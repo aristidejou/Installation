@@ -24,8 +24,8 @@ terraform destroy
 *****************************************************Create a new EC2 instance with an Elastic IP,add name on the machine
 provider "aws" {
 region = "us-east-2"
- access_key = "AKIASTDBTX7FKAATR2MI"
- secret_key = "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"
+ access_key = ""
+ secret_key = ""
 }
 resource "aws_instance" "ubuntu" {
   ami           = "ami-02f3416038bdb17fb"
@@ -47,15 +47,15 @@ terraform destroy
 ***************************************************************create 1 EC2 IN OHIO AND THE SECOND IN VIRGINIA
 provider "aws" {
 region = "us-east-2"
- access_key = "AKIASTDBTX7FKAATR2MI"
- secret_key = "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"
+ access_key = ""
+ secret_key = ""
 }
 
 provider "aws" {
   alias  = "usa"
 region = "us-east-1"
- access_key = "AKIASTDBTX7FKAATR2MI"
- secret_key = "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"
+ access_key = ""
+ secret_key = ""
 }
 
 resource "aws_instance" "ohio" {
