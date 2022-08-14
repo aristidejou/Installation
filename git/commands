@@ -1,0 +1,52 @@
+initiaze a git repository
+git init
+
+to see the status of the directory and files inside(track or untrack)
+git status
+
+add , stage file in the directory
+git add name-of-file or git add .
+
+to unstage
+git rm --cached name-of-file
+
+to commit the file in our local repository
+git commit -m "message" 
+
+copy to the remote repository
+git remote add origin "url"
+
+push files to the url
+git push origin master
+
+to update local repository from remote repository
+git pull origin master
+
+to clone a repository , copy the whole remote repository to local
+git clone <url>
+
+create branch
+git branch namee
+
+to delete branch
+git branch -D name
+
+to jump to another branch 
+git checkout branch
+
+to see which branch are you in
+git branch
+
+history of the repository,commit,log of the branch you are on
+git log
+
+file is not complete and you want to complete later
+git stash -u  //hide untrack file
+git stash  //hide tracked file 
+git stash pop
+
+to come back and it will create a commit/undo the changes we did before
+git reverb <commit-id>
+
+to see the difference between two commits or two files
+git diff commit-id1 commit-id2
