@@ -9,8 +9,8 @@ terraform version
 vi main.tf
 provider "aws" {
 region = "us-east-2" 
- access_key = "AKIASTDBTX7FKAATR2MI"
- secret_key = "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" 
+ access_key = ""
+ secret_key = "" 
 }
              resource "aws_instance" "web" {
   ami           = "ami-02f3416038bdb17fb"
