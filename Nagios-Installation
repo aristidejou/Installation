@@ -38,6 +38,7 @@ ssh ubuntu@private-IP-host
 sudo apt install nagios-plugins nagios-nrpe-server -y
 
 //add this line with Nagios server IP
+sudo vi /etc/nagios/nrpe.cfg
 allowed_hosts=127.0.0.1,private@IP Nagios
 -------
 sudo service nagios-nrpe-server restart
