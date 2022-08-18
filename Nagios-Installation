@@ -141,3 +141,7 @@ define service{
         service_description         HTTP
         check_command               check_http
         }
+	
+-----------------------------------to change email of admin for notification
+	sudo vi /usr/local/nagios/etc/objects/contacts.cfg
+	
