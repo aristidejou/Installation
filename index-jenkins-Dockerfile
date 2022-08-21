@@ -1,0 +1,31 @@
+simple Index.html
+
+<html>
+<title>Docker built It!</title>
+<body style="background-color:blue">Hello World!</br>by Docker</body>
+</html>
+
+Dockerfile to install apache2 on Ubuntu Image
+-------------------------------------------------------
+FROM ubuntu
+RUN apt-get update
+RUN apt-get -y install apache2
+ADD . /var/www/html
+ENTRYPOINT apachectl -D FOREGROUND
+
+-------------------------------------------------------------
+Install Jenkins on master
+
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo tee \ /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+https://pkg.jenkins.io/debian-stable binary/ | sudo tee \ /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install openjdk-11-jdk git -y
+sudo apt-get install jenkins -y
+---------------------------------------------------------------
+On Agent
+
+sudo apt-get update
+sudo apt-get install openjdk-11-jdk git -y
