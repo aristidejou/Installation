@@ -1,0 +1,38 @@
+Maven 
+
+apt install default-jdk -y
+wget <url maven>
+tar -xvzf <url maven>
+ cp <extract file> /opt/maven
+vi /etc/profile.d/maven.sh
+
+export JAVA_HOME=/usr/lib/jvm/default-java
+export M2_HOME=/opt/maven
+export MAVEN_HOME=/opt/maven
+export PATH=${M2_HOME}/bin:${PATH}
+
+sudo chmod +x  /etc/profile.d/maven.sh
+ source /etc/profile.d/maven.sh
+ mvn -version
+
+---------------------------playbook.yaml
+---
+- hosts: slave1
+  become: yes
+  name: Installing Java on slave1
+  tasks:
+  - name: Install java
+    apt:
+        update_cache: yes
+        name: openjdk-11-jdk
+        state: latest
+
+- hosts: slave2
+  become: yes
+  name: Installing mysql on slave2
+  tasks:
+  - name: Install MySQL
+    apt:
+        update_cache: yes
+        name: mysql-server
+        state: latest
