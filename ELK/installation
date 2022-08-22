@@ -1,0 +1,97 @@
+1-at least 2GBof ram
+2-at least 20Gb storage
+Ubuntu , t2 medium , 20Gb , all traffic
+
+sudo apt-get update
+sudo apt-get -y install openjdk-8-jdk
+sudo apt-get -y install nginx 
+sudo systemctl enable nginx
+
+sudo wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+sudo apt-get install apt-transport-https
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee –a /etc/apt/sources.list.d/elastic-7.x.list
+sudo apt-get update
+
+sudo apt-get install elasticsearch
+sudo vi /etc/elasticsearch/elasticsearch.yml
+
+network.host: 0.0.0.0
+http.port: 9200
+discovery.type: single-node
+
+sudo vi /etc/elasticsearch/jvm.options
+-Xms512m
+-Xmx512m
+
+sudo systemctl start elasticsearch.service
+sudo systemctl enable elasticsearch.service
+curl -X GET "localhost:9200"
+
+sudo apt-get install kibana
+sudo vi /etc/kibana/kibana.yml
+
+server.port: 5601
+server.host: "0.0.0.0"
+elasticsearch.hosts: ["http://localhost:9200"]
+
+sudo systemctl start kibana
+sudo systemctl enable kibana
+
+
+http://IP@PUBLIC:5601
+
+sudo wget https://artifacts.elastic.co/downloads/logstash/logstash-8.3.3-linux-x86_64.tar.gz
+tar -xzvf 
+ sudo tar -xvfz logstash-8.3.3-linux-x86_64.tar.gz
+sudo mv logstash-8.3.3 /etc/logstash
+sudo cd config
+//erase everything
+path.data: /var/lib/logstash
+path.config: /etc/logstash/config/*.conf
+path.logs: /var/log/logstash
+cd
+
+
+sudo apt-get install filebeat
+sudo vi /etc/filebeat/filebeat.yml
+
+//Under the Elasticsearch output section, comment out the following lines:
+# output.ela
+# Array of hosts to connect to.
+# hosts: ["localhost:9200"]
+
+//Under the Logstash output section, remove the hash sign (#) in the following two lines:
+  output.logstash
+  hosts: ["localhost:5044"]
+
+sudo filebeat modules enable system
+sudo filebeat modules enable nginx
+
+//sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]'
+
+sudo systemctl start filebeat
+sudo systemctl enable filebeat
+ sudo systemctl status filebeat -l
+ 
+ //there will be mistake then open another windows 
+sudo bash
+cd /etc/logstash/bin
+./logstash
+//you will see starting server on port: 5044 and go back to the other windows and do
+systemctl restart filebeat
+systemctl status filebeat -l
+
+
+
+
+
+
+
+
+curl -XGET http://localhost:9200/_cat/indices?v
+-------------------------------------------------------------------
+
+
+
+
+tar -xvfz 
