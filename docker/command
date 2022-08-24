@@ -1,0 +1,33 @@
+Vi index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> This is module5 Assignment </title>
+</head>
+<body>
+    <h1>We are learning Docker</h1>   
+</body>
+</html>
+-------------------------------------------------------Vi Dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN apt install apache2 -y
+ENTRYPOINT apache2ctl -D FOREGROUND
+----------------------------------------------------------------------------------create a docker volume
+docker volume create my-volume
+docker run -it --mount source=my-volume,destination=/var/www/html ubuntu-apache
+docker volume inspect my-volume
+--------------------------------------------------------------------------------Create a bind mount on /var/www/html 
+mkdir mount
+sudo docker run -itd -v /home/ubuntu/mount:/var/www/html ovdi/ubuntu-apache
+--------------------------------------------------------------------------------Create a Docker Network, of type overlay 
+ docker network create –d overlay my-overlay
+ --------------------------------------------------------------------------------link two containers
+ docker run –it --name <name-of-container> --link <container-name> -d ubuntu
+docker exec –it <container-name> bash
+sudo apt-get update
+ apt-get install iputils-ping
+ping container1
+-------------------------------------------------------------------------------
