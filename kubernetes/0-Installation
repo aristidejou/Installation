@@ -1,5 +1,7 @@
 ***********Installation
+master medium
 run this on both--master and slave
+
 sudo su
 apt-get update
 apt-get install docker.io -y
@@ -33,6 +35,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 
 //Check the nodes for its state after installing network plugins.
 kubectl get nodes
+kubectl get pods --all-namespaces
 
 //Thus, we have successfully installed Kubernetes. Run the below command to create a dashboard
 kubectl apply -f
