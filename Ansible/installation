@@ -1,41 +1,27 @@
 On master
 
 sudo apt-get update
-
 sudo apt install software-properties-common -y
-
 sudo apt-add-repository ppa:ansible/ansible
-
 sudo apt update
-
-sudo apt install ansible
+sudo apt install ansible -y
 
 on slave
-
 sudo apt-get update
-
 sudo apt-get install python
 
 on master
-
 cd .ssh/
-
 ssh ubuntu@ip slave
-
 ssh-keygen
-
 cat id_rsa.pub
 
 on slave
-
 cd .ssh
-
 vi authorized_keys
-
 paste the keys you copied from master (id_rsa.pub)
 
 on master 
-
 ssh ubuntu@ip slave
 
 exit
@@ -43,7 +29,6 @@ exit
 sudo vi /etc/ansible/hosts
 
 [servers]
-
 slave1 ansible_ssh_host=@ip slave
 
 ansible -m ping all or ansible -m ping slave1 or
