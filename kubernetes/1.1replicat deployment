@@ -1,0 +1,257 @@
+the apiVersion should be good here is apps/v1
+************************************************************************************************Deployment******************************
+  apiVersion: apps/v1 
+kind: Deployment  
+metadata:
+  name: nginx-deployment 
+  labels:
+    app: nginx 
+spec:
+  replicas: 3 
+  selector: 
+    matchLabels:
+      app: nginx 
+  template: 
+    metadata: 
+      labels:
+        app: nginx 
+    spec: 
+      containers:
+      - name: nginx 
+        image: nginx:1.15.4 
+        ports: 
+        - containerPort: 80
+ ************************************************************************************************************************
+//create deployment
+kubectl create -f dep1.yaml
+
+//see number of pods
+kubectl get pods
+
+//to see more details on pods
+kubectl describe pods
+
+//to see the deployment
+kubectl get deployment
+
+//to see all namespaces of pods
+kubectl get pods --all-namespaces
+
+//delete deployment
+kubectl delete deploy name-deployment
+
+//delete a pods
+kubectl delete pods name-pod
+*********************************************************************pod1.yaml*******************************Pod*************************
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: intellipaat
+spec:
+  containers:
+  - name: intelli
+    image: hshar/webapp
+    ports:
+    - containerPort: 9876
+*********************************************************************pod2.yaml***********************************Pod*********************
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: intellipaat
+  labels:
+    env: testpod
+spec:
+  containers:
+  - name: intelli
+    image: hshar/webapp
+    ports:
+    - containerPort: 9876
+------------------------------------------------------------------add label on a port  && show ports with labels name
+kubectl label pods intellipaat dog=cat
+
+kubectl get pods --show-labels
+***************************************************************************************************************ReplicationController*****
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+********************************************************scale deployment
+kubectl scale --replicas=4 deployments name-deployment
+kubectl describe deployments name-deployment
+**************************************************************************************************change de images
+kubectl set image deployments/name-deployment nginx=centos:07
+
+to check
+kubectl describe deployments name-deployment 
+***************************************************************************for roll
+kubectl rollout status deployments/name-deployment
+
+kubectl rollout history deploy/name-deployment
+
+***********************************************************************undo rollout and come back behind
+kubectl rollout undo deploy/name-deployment --to-revision=1
+
+##################################################################################################################services
+to create a service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec: 
+  selector:
+    app: MyApp
+  ports:
+    -protocol: TCP
+    port: 80
+    targetPort: 9376
+ ------------------------------------if a service doenst have selector, the corresponding Endpoint is not created automatically
+ you can map manually the service to the network address and port where is running by adding an endpoint object manually
+ 
+ apiVersion: v1
+kind: Endpoints
+metadata:
+  name: my-service
+subnets:: 
+  - addresses:
+      - ip: 192.0.2.42
+    ports:
+      - port: 9376
+----------------------------------------------------------------create a simple service that map to the deployment 
+vi serr.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: simpleservice
+spec:
+  ports:
+    - port: 80
+      targetPort: 9876
+  selector:
+    app: sise
+    
+    0r with the CLI
+   kubectl create svc nodeport nginx --tcp=80:80 , kubectl get svc
+   browser: @ip-master:port
+=================================
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: rcsise
+spec:
+  replicas: 1
+  selector:
+    app: sise
+  template:
+    metadata:
+      name: somename
+      labels:
+        app: sise
+    spec:
+      containers:
+      - name: sise
+        image: hshar/webapp
+        ports:
+        - containerPort: 9876
+============================================
+  kubectl expose deployment/name-deployment --type="NodePort" --port 8080
+====================================================================================================================Creating a JOB
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: countdown
+spec:
+  template:
+    metadata:
+      name: countdown
+    spec:
+      containers:
+      - name: counter
+        image: centos:7
+        command:
+         - "bin/bash"
+         - "-c"
+         - "for i in 9 8 7 6 5 4 3 2 1 ; do echo $i ; done"
+      restartPolicy: Never
+
+
+ kubectl describe jobs/countdown
+ kubectl logs countdown-wqhnm
+ ===============================================================================volume
+ hostPath:mount a file/directory from the host node filesystem into your pod
+ 
+ gcePersistentDisk: mount a googlecompute engine(GCE) persistent disk into your pod.data in GCE remain intact when the pods is removed from the node
+ 
+ awsElasticBlockStore: mount in amazon web services(EBS) into your pod.like GCE data remain intact when pod is removed from the node
+ 
+ nfs: allow nfs to be mounted into your pod.data isnt erased when the pod is removed from the node.the volume is only unmounted
+ 
+ iscsi: 
+ 
+ flocker: 
+ 
+ ======================================================================hands on volume
+ 
+ apiVersion: v1
+kind: Pod
+metadata:
+  name: sharevol
+spec:
+  containers:
+  - name: c1
+    image: centos:7
+    command:
+      - "bin/bash"
+      - "-c"
+      - "sleep 10000"
+    volumeMounts:
+      - name: xchange
+        mountPath: "/tmp/xchange"
+  - name: c2
+    image: centos:7
+    command:
+      - "bin/bash"
+      - "-c"
+      - "sleep 10000"
+    volumeMounts:
+      - name: xchange
+        mountPath: "/tmp/data"
+  volumes:
+  - name: xchange
+    emptyDir: {}
+============================
+kubectl create -f p1.yaml
+kubectl describe pods sharevol
+
+go in the container c1
+kubectl exec -it sharevol -c c1 -- bash
+find . -name xchange
+or
+mount | grep xchange
+echo "intellipaat is the best" > /tmp/xchange/data
+
+kubectl exec -it sharevol -c c2 -- bash
+mount | grep /tmp/data
+cat /tmp/data/data
+you will see "intellipaat is the best"
+===========================================================================================
+ 
