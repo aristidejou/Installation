@@ -1,4 +1,4 @@
-On master
+On master/stay in user mode not root
 
 sudo apt-get update
 sudo apt install software-properties-common -y
