@@ -1,0 +1,87 @@
+deployment on kubernetes cluster usisng jenkins ci/cd
+3 instances
+jenkins , ansible = micro
+k8s = medium instances + 20G0
+
+-jenkins (default-jre + jenkins)
+-Ansible (python + ansible + docker)
+-webapp (kubernetes cluster) --> (docker )
+
+schema                         |-------> Docker hub 
+                               |
+                               |
+user -> github -> jenkins -> Ansible -> kubernetes
+
+//after each push  you can see files in /var/lib/jenkins/workspace/pipeline-demo
+
+jenkins -install ssh agent
+
+config webhook on github
+for the secret go to jenkins -> your name -> configure -> add new token -> generate 
+copy and paste on github
+
+create pipeline project
+check this -> GitHub hook trigger for GITScm polling
+click this if you dont know the syntax -> Pipeline Syntax
+
+node{
+    
+    stage('Git checkout'){
+        git 'https://github.com/aristidejou/p1.git'
+                         }
+    stage('sending docker file to ansible server over ssh'){
+    sshagent(['new-key']) {
+            sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.30.221' 
+            sh ' scp /var/lib/jenkins/workspace/pipeline-demo/* ubuntu@172.31.30.221:/home/ubuntu '
+                          }
+                                                           }
+    stage ('Docker build image'){
+         sshagent(['new-key']) {
+             sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.30.221 cd /home/ubuntu/'
+             sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.30.221 sudo docker image build -t $JOB_NAME:$BUILD_ID .'
+         }
+    }
+    stage('docker image tagging'){
+        sshagent(['new-key']){
+        sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.30.221 cd /home/ubuntu/'
+        sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.30.221 sudo docker image tag $JOB_NAME:$BUILD_ID ovdi/$JOB_NAME:$BUILD_ID'
+        sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.30.221 sudo docker image tag $JOB_NAME:$BUILD_ID ovdi/$JOB_NAME:latest'
+        }
+    }
+    stage ('push docker images to docker hub'){
+         sshagent(['new-key']){
+             withCredentials([string(credentialsId: 'dockerhub_password', variable: 'dockerhub_password')]) {
+        sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.30.221 sudo docker login -u ovdi -p ${dockerhub_password}'
+        sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.30.221 sudo docker image push ovdi/$JOB_NAME:$BUILD_ID'
+        sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.30.221 sudo docker image push ovdi/$JOB_NAME:latest'
+                                                                                                              }
+             }
+      }
+      
+     stage('copy files from ansible to kubernetes server'){
+              sshagent(['kubernetes']) {
+    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.23.222'
+    sh ' scp /var/lib/jenkins/workspace/pipeline-demo/* ubuntu@172.31.23.222:/home/ubuntu '
+                                         }
+                                                           }
+}
+
+
+ansible to kubernetes
+on k8s
+-passwd root
+-vi /etc/ssh/sshd_config
+permitRootlogin yes
+password Authentification yes
+-service sshd restart
+
+on ansible
+-ssh-keygen
+-go where is the key
+ssh-copy-id -i root@ip_k8s
+exit
+vi /etc/ansible/hosts
+[node]
+ip@-k8s
+
+ansible -m ping node
