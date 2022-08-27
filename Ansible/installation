@@ -8,7 +8,7 @@ sudo apt install ansible -y
 
 on slave
 sudo apt-get update
-sudo apt-get install python
+sudo apt-get install python-is-python3
 
 on master
 cd .ssh/
