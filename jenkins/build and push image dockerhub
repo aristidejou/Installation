@@ -1,0 +1,68 @@
+gitgub-----------jenkins-----------jenkins slave-----------docker
+       pull code           build image            push image
+
+install git on jenkins slave
+install docker on jenkins slave
+
+create node docker-node
+Labels = docker-build-node 
+remote root directory= /opt/build
+
+goto dockerhub
+click your name
+accounts settings
+security
+new access token
+jenkins
+generate
+copy 2
+
+goto jenkins
+manage jenkins
+manage credentials
+jenkins/global credentials/add credentials
+username and password
+username:ovdi
+password:paste token you copied
+Id:docker-hub-ovdi *********************
+
+
+docker-pipeline
+
+pipeline {
+        agent any // change any with {label "docker-build-node"}  to specidy where we want the code to run
+        environment{
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-ovdi')************
+        }
+        stages{
+              stage('SCM checkout'){
+                   steps{
+                   git 'https://guthub-----'
+                   }
+              }
+              stage('build docker image'){
+                   steps{
+                        sh 'docker build -t ovdi/nodeapp:$BUILD_NUMBER .'
+                   }
+              }
+              
+              stage('login to dockerhub'){
+                   steps{
+                        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                   }
+              }
+              stage('PUSH IMAGE'){
+                   steps{
+                        sh 'docker push -t ovdi/nodeapp:$BUILD_NUMBER .'
+                   }
+              }
+              
+        }
+        
+     post {
+          always{
+                sh 'docker logout'
+          }
+     }
+
+}
