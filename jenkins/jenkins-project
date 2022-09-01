@@ -1,0 +1,52 @@
+pipeline syntax
+
+pipeline{                   top level
+        agent any                     where to build
+        stages{                                       where work happens
+              stage("build"){                                              what to do
+                       steps{
+                       }
+              }
+       }
+}
+----------------------------------------pipeline project--------------------------------------------
+
+pipeline{                   
+        agent any                     
+        stages{                                       
+              stage("clone code"){                                     
+                       steps{
+                       git 'https://github.com/aristidejou/capstone1.git',branch:'develop'
+                       }
+              }
+       }
+}
+---------------------------------------------maven project-----maven should be installed in the system----------------------------------
+manage jenkins
+global tools conf
+add maven
+-----------------------------
+git ,url
+*/master
+build: pom.xml  
+clean install
+-------------------------add maven in pipeline----go in the shell and check where maven is install to find the path =whereis mvn
+pipeline{                   
+        agent any        
+        environment{
+            PATH= "/opt/apache-maven-3.6.3/bin:$PATH"
+        }
+        stages{                                       
+              stage("clone code"){                                     
+                       steps{
+                       git 'https://github.com/aristidejou/capstone1.git',branch:'develop'
+                       }
+              }
+              stage("build"){                                     
+                       steps{
+                         sh "mvn clean install"                     
+                         }
+              }
+       }
+}
+-------------------------
