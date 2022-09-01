@@ -1,0 +1,29 @@
+build maven project on jenkins slave node
+
+you can download maven
+goto manage/global tools config/maven installation copy the path
+goto cmd ,cd /opt 
+download maven .tar.gz
+extract tar -xvzf name.tar.gz
+mv apache...8.4 maven
+cd maven
+vi ~/.bash_profile
+M2_HOME=/opt/maven
+M2=/opt/maven/bin
+PATH=$PATH:$HOME/bin:$M2_HOME:$M2
+
+source ~/.bash_profile
+echo $PATH //to check
+mvn --version
+
+maven-demo
+maven project
+restrict : node1 //where maven is setup
+git url
+build 
+goal : clean install
+save
+
+if you go to cmd and check
+cd /otp/build/workspace
+you will see the project
