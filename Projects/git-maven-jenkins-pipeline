@@ -1,0 +1,39 @@
+Part1
+Install maven from jenkins
+Manage
+Global tools conf
+Maven
+
+1-freestyle project   maven project
+
+Create job1:compilejob
+Git : url
+Build: involve top-level Maven targets
+Maven version: Maven01
+Goals: compile
+Apply, save
+
+Review job:
+Git: url
+Build: involve top-level Maven targets
+Maven version: Maven01
+Goals: -P matrix pmd:pmd
+Post build action: publish html reports
+Apply, save
+
+Testjob:
+Git:url
+Build:involve top-level maven targets
+Maven version: Maven01
+Goal: test
+Apply,save
+
+Pipeline: install build pipeline view from manage
+Select initial job : compilejob , save
+
+Go to reviewjob 
+Build triggers: build after other projects are built: compilejob
+
+Goto testjob:
+Build triggers: build after other projects are built: reviewjob
+
