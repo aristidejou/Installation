@@ -1,0 +1,4 @@
+after you install java on the cmd
+find / -name javac
+come here and add the path
+JAVA_home = /usr/lib/jvm------86_64
