@@ -1,0 +1,80 @@
+Devops Goals are
+
+High availability
+Security
+Scalable
+Logging
+Monitoring
+Automation
+Fast delivery
+
+Developer 1-develop the software product
+           DEVOPS ENGINEER (SCRUM CONTINUOUS INTEGRATION AND CONTINUOUS DEPLOYMENBT)
+Operations 1-deploy the software product 2-maintain the servers
+
+Agile Development
+1-develops functionality1
+2-integrate and test
+3-develop functionality2
+4-integrate and test
+----
+5-develop functionality N
+6-integrate and test
+
+DEMO RELLEASE
+
+client feedback
+make changes
+system testing
+all functionalitues complete?
+yes good
+No go back to the beginning
+
+LINUX = install and conf devops tools
+AWS = infractructure solution
+GIT = version control system
+BITBUCKET = distributed control system
+MAVEN= build java source code
+JFrog ARTIFACTORY = STORE ARTIFACT
+SONARQUBE = quality check
+ANSIBLE = configuration automation
+NGINX = reverse proxy server
+DOCKER = manage containerized applications
+GRAFANA = monitor applications
+JENKINS = ci/cd for continuous intgration and continuous deployment
+PYTHON = automate certain devops responsabilities
+TERRAFORM = infrastructure deployment
+MYSQL = database solution to store the data
+JIRA = to follow the scrum process to make the technologies are integrated snd deployed by following certain process while delivering the services
+KIBANA = monitor the logging of the applications at a central place
+HELM = for the deployment tool it into the kubernetes cluster fluency for logging the applications logs
+PROMETHEUS = for monitoring 
+KUBERNETES = deploy your workload and run the workload s a microservices
+
+all this tools help to follow the continuous integration and continuous deployment
+to help develop team and handling over the workload to the operations teams
+
+what is devops?
+culture of integrating multiples tools which will helping the business to meet the business expectations
+1-continuous development (git/bitbucket)
+2-infrastructure as a code(terraform, linux, aws , mysql)
+3-configuration automation(ansible, python)
+4-continuous orchestration (kubernetes , docker)
+5-continuous delivery (jenkins , helm)
+6-continuous integration (jfrog artifactory, maven , sonarqube)
+7-continuous operations (aws . kubernetes)
+8-continuous logging (kibana, elasticsearch, fluentd)
+9-continuous monitoring(Grafana, Prometheus)
+
+roles and responsabilities
+
+
+site reliability engineer                   security                        devops manager
+aws architect                     infrstructure and satat security           Devops architect
+
+
+
+developer-------------------------devops engineer-----------------------------TechOps production
+java                                jenkins ci/cd                             aws SysOps
+
+
