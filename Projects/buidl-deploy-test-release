@@ -1,0 +1,40 @@
+build
+freestyle
+execute shell
+date
+echo "build process succesfully done..."
+
+
+deploy
+freestyle
+execute shell
+date
+echo "deploy job succesfully executed"
+build triggers,build after build
+
+test
+freestyle
+execute shell
+date
+echo "test job succesfully executed..."
+build triggers,build after deploy
+
+release
+freestyle
+execute shell
+date 
+echo "release job succesfully executed..."
+build triggers,build after test
+
+manage plugin
+build pipeline plugin
+
+pipeline
+build pipeline view
+select initial job : build
+
+deliver_pipeline-view
+delivery pipeline view
+components ,add : 
+name: myDeliveryPipeline
+initial job: build
