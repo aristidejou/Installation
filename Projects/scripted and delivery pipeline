@@ -1,0 +1,59 @@
+scripted pipeline
+all steps are called groovy scripting
+
+name
+choose pipeline
+1- pipeline script
+node {
+     stage('Build')
+     {
+        echo "building the project....."
+     }
+     
+     stage('Test')
+     {
+         echo "Testing the project...."
+     }
+
+     stage('Deploy')
+     {
+         echo "Deploying the project...."
+     }
+
+}
+
+//check this file https://jenkins.io/doc/book/pipeline/jenkinsfile/
+
+declarative_pipeline
+2-pipeline script from SCM
+SCM = Git , url
+script path = jenkinsfile //name of the file in the repository
+
+you will have jenkinsfile with cmd
+
+jenkinsfile
+pipeline{
+        agent any
+            stages
+            {
+              stage ('Build')
+                {
+                  steps {
+                        echo "Building the project..."
+                        }
+                }
+                stage ('Test')
+                {
+                  steps {
+                        echo "Testing the project..."
+                        }
+                }
+                stage ('Deploy')
+                {
+                  steps {
+                        echo "Deploying the project..."
+                        }
+                }
+                
+            }
+        }
