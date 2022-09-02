@@ -1,0 +1,39 @@
+staging node
+/home/ubuntu/jenkins
+
+production node
+/home/ubuntu/jenkins
+
+git-job      //this will copy the code on the staging-node
+restrict on staging node
+git,url,master
+github hook trigger
+post-build,build other project
+build-website
+
+build-website
+freestyle
+restrict = staging
+none
+build, execute shell:
+sudo docker rm -f $(sudo docker ps -a -q)
+sudo docker build /home/ubuntu/jenkins/workspace/git-job/ -t website
+sudo docker run -it -p 82:80 -d website
+post-build,build other project
+push-prod
+
+push-prod
+github-project url
+restrict,production
+build,execute shell
+sudo docker rm -f $(sudo docker ps -a -q)
+sudo docker build /home/ubutnu/jenkins/workspace/push-prod/ -t website
+sudo docker run -it 80:80 -d website
+
+
+
+Dockerfile
+FROM hshar/webapp
+ADD . /var/www/html
+
+config the Ip@github-webhook/
