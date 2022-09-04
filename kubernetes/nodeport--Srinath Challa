@@ -1,0 +1,101 @@
+                                               |-------------> https://192.168.1.1:31000
+                                               |
+                                               |
+                                             31000---->NodePort  (30000-32767)
+                                          192.168.1.1 --> NodeIp
+                                               |
+                                               |
+                                               |
+                                               |
+                                               |
+                                              80 -------> Port
+                       --------------------10.180.0.15------------------
+                                            service                
+                       |                     NodePort                  |
+                       |                       |                       |
+                       |                       |                       |
+                       |                       |                       |
+                       |                       |                       |
+                       |                       |                       |
+                      80                      80                      80 --------> TargetPort
+                  10.210.0.4              10.210.0.2               10.210.0.3
+                  labels:                  labels:                  labels:
+                  app: Myapp                app: Myapp              app: Myapp
+                                          frontend-pod
+
+
+
+nginx-deploy.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: nginx-deployment
+  labels:
+    app: ngix-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-app
+    template:
+      metadata:
+        labels:
+          app: nginx-app
+      spec:
+        containers:
+        - name: nginx-container
+          image: nginx:1.7.9
+          ports:
+          - containerPort: 80
+
+nginx-svc-np.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  labels: 
+    app: nginx-app
+spec:
+  selector:
+    app: nginx-app <---------    app: nginx-app
+  type: NodePort
+  ports:
+  - nodeport: 31000
+    port: 80
+    targetPort: 80    <--------- containerPort: 80
+    
+    
+    create the deployment
+    kubectl create -f nginx-deploy.yaml
+    
+    create the service for that deployment
+    kubectl create -f nginx-svc-np.yaml
+    
+    let see ll the service in the cluster but restrict the ouput with the name nginx-app
+    kubectl get service -l app=nginx-app   
+    //10.97.148.44:80    Port = service Ip
+    
+    by doing curl we can see if nginx is in the pods
+    curl http://10.97.148.44:80
+    
+    let display pods     TargetPort=Pod Ip
+    kubectl get pods -o wide
+    //10.240.2.148:80
+    
+    by doing curl we can see if nginx is in the pods
+    curl http://10.240.2.148:80
+    
+    describe the service
+    kubectl describe svc my-service
+    
+    ips and ports
+    gcloud compute instances list
+    
+   browser: 35.193.47.186:31000/  Ip@ for one node
+    
+    to delete a service
+    kubectl delete svc my-service
+    
+ 
