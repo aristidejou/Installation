@@ -1,0 +1,9 @@
+compile job
+freestyle project
+git,url
+build , invoke top-level ,compile
+save
+
+
+
+
