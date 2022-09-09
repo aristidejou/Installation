@@ -1,0 +1,31 @@
+compile job
+freestyle project
+git,url = https://github.com/maven-download-plugin/maven-download-plugin.git
+build trigger = GitHub hook trigger for GITScm polling
+build , invoke top-level ,compile = Maven Version (install maven from global tool conf)
+Goal = compile
+save
+
+review job
+https://github.com/maven-download-plugin/maven-download-plugin.git
+Build after other projects are built = compile job
+Invoke top-level Maven targets
+ maven version = maven
+ goals = -P matrix pmd:pmd
+save
+
+test job
+https://github.com/maven-download-plugin/maven-download-plugin.git
+Build after other projects are built= review job
+Invoke top-level Maven targets
+
+maven version = maven
+goals = test
+save
+
+(install build pipeline)
+create pipeline1
+Select Initial Job
+
+compile
+save
