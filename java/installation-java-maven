@@ -1,0 +1,15 @@
+after installation of java , copy the path and go to environments variables
+choose path and add C:\Program Files\Java\jdk-18.0.2.1\bin
+after new  variable name = JAVA_HOME value=C:\Program Files\Java\jdk-18.0.2.1
+chect java -version , javac -version to see if installation was good
+
+from broswer find apache maven 
+download .zib extract copy the directory apache-maven-3.8.6 and paste in c:/progam files
+GO to environment variables
+edit path and new C:\Program Files\apache-maven-3.8.6\bin
+name=MAVEN_HOME value= C:\Program Files\apache-maven-3.8.6
+name=M2_HOME value=C:\Program Files\apache-maven-3.8.6
+
+create a maven program from scratch
+cmd create dev directory goto c:/>dev
+mvn archytype:generate
