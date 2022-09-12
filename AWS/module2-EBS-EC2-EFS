@@ -1,0 +1,102 @@
+public ip 
+is not associated with an aws account
+no charge for the public ip
+when instance re launched it changes
+
+elastic ip
+it is associated with aws account
+charges are applied
+it is the same until manually release
+
+****************EBS ELASTIC BLOCK STORAGE
+EC2 is directly connected to EBS
+while instance is running a volatile memory called ephemeral storage will be attached to the instance
+if the instance is stopped the ephemeral memory will be detached
+
+****************EBS CONCEPTS
+THROUGHPUT=sequential transfer rate that an ssd or hdd will maintain continuously ****  ****   ****
+IOPS=measure of the number of I/O opeartions a drive can handle per second wich each block being read from or written to a ramdom location in the disk
+iops 100 means every second 
+your EBS write 50 read 50 operations
+or write 30 and read 70 operations
+
+**************volume type of EBS volume
+
+                                         size limit             max iops                max throughput          max burst
+                                         
++GP2:GENERAL PURPOSE SSD                1GB-16GB                4GB-16GB                500GB-16TB              500GB-16TB
+
++IO1:PROVISIONED SSD                    10 000                  32 000                  500                     250       NEW FEATURE EBS MULTI-ATTACH
+
++ST1:THROUGHPUT-optimized HDD           160 MB/S                500 MB/S                500 MB/S                192 MB/S        
+
++SC1:COLD STORAGE HDD                   3000                    NA                      500 MB/S                250 MB/S
+
+we can now enable multi-attache on amazon ebs provisioned iops io1 volumes to allow a single volume to be concurrently attached to up to 16 AWS nitro system-based
+amazon EC2 instances within the same availability zone.
+
+without multi-attach for each EC2 (1) --> EBS(1)     EC2 (2) --> EBS(2)   EC2 (3) --> EBS(3)
+BUT with multi-attach EC2 (1)  EC2 (2)  EC2 (3)  ----> Single EBS you pay less
+
+**********************************SNAPSHOT = backup
+snapshot are used to backup data on EBS volumes
+all snapshot are incremental backups except for the first one
+snapshot are copied to amazon S3
+
+A B C --->  1st snapshot   A B C
+A B C D ---> 2nd snapshot  D
+
+*******************************Ebs encryption        INSTANCE-SNAPSHOT-EBS
+
++SUPPORTED BY ALL VOLUMES BUT NOT ALL INSTANCES
+HELLO <----> :"? ---SNAPSHOT--->:"?
+
++UNENCRYPTED TO ENCRYPTED
+HELLO---->HELLO-----copy and encrypt--> :"?---->:"?
+
++ENCRYPTED TO UNENCRYPTED
+:"?------->    ------>HELLO
+
+******************************CREATE /MOUNT EBS VOLUME
+sudo su //name of file system = xvdf
+
+lsblk
+
+file -s /dev/xvdf
+
+mkfs -t ext4 /dev/xvdf
+
+mkdir ebsvolume
+
+mount /dev/xvdf ebsvolume
+
+lsblk //to check if it is mount
+
+df -h
+
+umount /dev/xvdf
+
+//after you resize from the console do this to see the change
+resize2fs
+
+**********************************EFS elastic file system
+benefits:
+highly available, elastic , high performance, shared file system
+mounting efs into ec2
+
+create efs into aws  and click on attach 
+++++++++++++++++++++++++
+sudo apt-get update
+sudo apt-get -y install nfs-common
+mkdir efs
++++++++++++++++++++++++
+df -h
+umount efs
+copy cmd from aws and paste
+*************************************Reserved / spots instances
+
+DEDICATED   you have your own hardware , you dont share 
+
+RESERVED   for you only,
+
+SPOT  unused ec2,terminate if price increase than the bid price
