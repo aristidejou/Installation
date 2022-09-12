@@ -1,0 +1,19 @@
+clouds services models
+IAAS=infrastructure as a service (AWS , ms azure)
+PAAS=platform as a servie (aws elastic beanstalk, heroku)
+SAAc=software as a service(office365, google drive)
+
+clouds deployment models
+public cloud(aws , google platform, ms azure)
+private cloud (hpe , vmware, redhat openstack)
+hybrid cloud
+
+order : AWS , AZURE , GOOGLE
+
+type of hypervisor in aws
+
+type1: native/bare metal (hardware --------> hypervisor-> linux , windows) aws , hypervisor name=xen server
+type2: hosted            (hardware -> OS -> hypervisor -> linux , windows) 
+
+AMI AMAZOM MACHINE IMAGE contains info to lunch an instance
+
