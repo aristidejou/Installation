@@ -1,0 +1,42 @@
+ELB uniformly distributes the network traffic and workload accross multiples servers or cluster of servers.
+load balancer increases availability and fault tolerance of an application
+distribute traffic to healthy instances only and evently
+internet and internal facing load balancer
+
+OSI MODEL
+7-Application
+6-Presentation
+5-Session
+4-Transport
+3-Network
+2-Data
+1-Physical
+
+TYPES OF ELASTIC LOAD BALANCER
++classic load balancer
+distribute application  traffic at level 7 of OSI model
+
++network load balancer
+fucntion at level 4 layer 
+
++application load balancer
+distribute application  traffic at level 7 of OSI model
+
+******************************************************CREATE A LOAD BALANCER= classic
+create two ec2 , install apache2 and change index for this is website1 and this is website 2
+create a ELB 
+classic load balancer
+put the name
+choose the security group 
+next
+check both add ec2 instances
+close and wait status instance to be on service
+
+copy dns name and actualize and see how it can go from instance1 to instance2
+
+******************************************************CREATE A LOAD BALANCER= Application
+create ELB
+create application
+name
+choose the region
+
