@@ -1,0 +1,18 @@
+sudo yum update -y
+sudo yum install epel-release -y
+sudo yum install java-11-openjdk -y
+sudo mkdir /app && cd /app
+sudo wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz -O nexus.tar.gz
+sudo tar -zxvf nexus.tar.gz
+sudo ln -s nexus-* nexus
+useradd nexus
+chown -R nexus:nexus /app/nexus
+sudo ln -s /app/nexus/bin/nexus /etc/init.d/nexus
+sudo chown nexus:nexus /etc/init.d/nexus
+sudo chkconfig --add nexus
+sudo systemctl enable nexus
+sudo service nexus start
+browser @ip:8081
+
+cat /app/sonatype-work/nexus3/admin.password
+name=admin
