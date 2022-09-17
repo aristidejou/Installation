@@ -1,0 +1,30 @@
+cloudformation: allows us to model our entire infrastruture in a file.
+so if you want to delete you delete everything once.
+
+we can make a template and use it anytime .
+-------------------------------------------------------------------------------3 concepts
+3 concepts:
+-template save in (.json , .yaml , .txt , .template)
+-stacks (all the servcie put together) create with cli , API , console
+-change sets (to change the running resource we update the stack)
+-------------------------------------------------------------------------------how cloud formation work
+code / template -----> code locally/upload into an s3------> use aws CF via gui,cli to create a stack based on template code---->
+
+code   is upload to s3 and the link is take from s3 by cloudformation to build the template form stack and run the stack             
+----------------------------------------------------------------------------------------
+NESTED STACKS= stacks created as part of other stacks.
+AWS::CloudFormation::Stack resource
+
+for the first level of netstack the root is also the parent
+for B , A is parent and root
+for stack D, stack C is parent stack , while for stack C , stack B is parent stack
+A------------->B------------>C------------------>D
+
+admin create  STACKSET this extend the functionality of stacks by enabling us to create,delete,update stacks accross multiple accounts and regions in single operations
+                   admin --->stack set
+                            
+target account A            B                  C
+region1                 region2              region3
+stack                      stack                stack
+
+---------------------------------------------------------------------------------------------------------
