@@ -31,4 +31,28 @@ sudo vi /etc/ansible/hosts
 [servers]
 slave1 ansible_ssh_host=@ip slave
 
-ansible -m ping all or ansible -m ping slave1 or
+ansible -m ping all or ansible -m ping slave1 
+
+ create a script
+ vi script.sh
+ echo "Hello World!" > /var/www/html/1.html
+-----------------play.yaml---------------------
+---
+ - hosts: slave1
+   become: yes
+   name: installing apache2 on slave1
+   tasks:
+   - name: install apache2
+     apt: name=apache2  state=latest
+
+ - hosts: slave2
+   become: yes
+   name: installing nginx on slave2
+   tasks:
+   - name: install nginx
+     apt: name=nginx  state=latest
+   - name: running a script
+     script: script.sh
+ ------------run with Ansible-playbook play.yaml----
+ 
+
