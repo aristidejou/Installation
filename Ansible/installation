@@ -18,7 +18,7 @@ cat id_rsa.pub
 
 on slave
 cd .ssh
-vi authorized_keys
+sudo vi authorized_keys
 paste the keys you copied from master (id_rsa.pub)
 
 on master 
