@@ -1,0 +1,16 @@
+to connect ansible to other machine
+on other machine goto /etc/ssh/sshd_config
+permitRootlogin yes
+passwordAuthentification yes
+
+service sshd restart
+
+on ansible machine
+sudo su
+ssh-keygen
+ssh-copy-id root@ip_machine //you will get connected
+
+goto /etc/ansible/hosts
+add @ip_machine
+
+ansible -m ping all
