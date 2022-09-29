@@ -1,0 +1,184 @@
+one pod can have many containers
+
+vi pod1.yaml
+-------------------------------------create pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: intellipaat
+spec:
+  containers:
+  - name: intelli
+    image: hshar/webapp
+    ports:
+    - containerPort: 9876
+    
+    
+ kubectl create -f pod1.yaml
+ kubectl get pods
+ kubectl decsribe pods intellipaat
+ kubectl delete pods intellipaat
+ 
+ ----------------------------------------add label 
+ vi pod1.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: intellipaat
+  labels: 
+    env: testpod
+spec:
+  containers:
+  - name: intelli
+    image: hshar/webapp
+    ports:
+    - containerPort: 9876
+    
+    
+ kubectl create -f pod1.yaml
+ kubectl get pods
+ kubectl decsribe pods intellipaat
+ ----------------------------------------assign label to pods with command
+ kubectl label pods intellipaat dog=cat
+ kubectl get pods --show-labels
+ kubectl delete pods intellipaat
+ *********************************************************************************replicationcontroller rc.yaml
+ apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        
+    kubectl create -f rc.yaml
+    kubectl get rc
+    kubectl get pods
+    kubectl delete rc nginx
+***********************************************************************************deployments=higher version of replicationcontroller
+with deployment we can update , rollback the replicaset
+ 
+  apiVersion: apps/v1 
+kind: Deployment  
+metadata:
+  name: nginxd
+  labels:
+    app: nginx 
+spec:
+  replicas: 3 
+  selector: 
+    matchLabels:
+      app: nginx 
+  template: 
+    metadata: 
+      labels:
+        app: nginx 
+    spec: 
+      containers:
+      - name: nginx 
+        image: nginx:1.7.9 
+        ports: 
+        - containerPort: 80
+  
+ kubectl scale --replicas=4 deploments nginxd               //change number of replicas
+ kubectl set image deployments/nginxd nginx=centos:07       //change image
+ kubectl describe deployments nginxd
+ kubectl rollout status deployments/nginxd                  //rollback
+ kubectl rollout history deployments/nginxd                 //how many revisions have been made
+ kubectl rollout undo deployments/nginxd --to-revision=1    //to rollback on the first revision
+ *******************************************************************************************************
+ vi serr.yaml
+ 
+ apiVersion: v1
+kind: Service
+metadata:
+  name: simpleservice
+spec:
+  ports:
+    - port: 80
+      targetPort: 9876
+  selector:
+    app: sise
+    
+    this will create simpleservice clusterIp
+    
+    ------this will create a nodeport and map with simpleservice
+    kubectl create svc nodeport nginx --tcp=80:80                   //create service with command
+-------------------------------
+ vi rcc.yaml
+ 
+ kubectl expose deployment/nginxd --type="NodePort" --port 8080  //expose our deployment as a service
+ 
+ 
+ browser @ip:
+ 
+ **********************************************************jobs
+ apiVersion: batch/v1
+kind: Job
+metadata:
+  name: countdown
+spec:
+  template:
+    metadata:
+      name: countdown
+    spec:
+      containers:
+      - name: counter
+        image: centos:7
+        command:
+         - "bin/bash"
+         - "-c"
+         - "for i in 9 8 7 6 5 4 3 2 1 ; do echo $i ; done"
+      restartPolicy: Never
+      
+ kubectl describe jobs/countdown
+ kubectl logs countdown-wqhnm
+ 
+ *****************************************************************volume 2 containers 
+ apiVersion: v1
+kind: Pod
+metadata:
+  name: sharevol
+spec:
+  containers:
+  - name: c1
+    image: centos:7
+    command:
+      - "bin/bash"
+      - "-c"
+      - "sleep 10000"
+    volumeMounts:
+      - name: xchange
+        mountPath: "/tmp/xchange"
+  - name: c2
+    image: centos:7
+    command:
+      - "bin/bash"
+      - "-c"
+      - "sleep 10000"
+    volumeMounts:
+      - name: xchange
+        mountPath: "/tmp/data"
+  volumes:
+  - name: xchange
+    emptyDir: {}
+    
+    kubectl create -f p1.yaml
+    kubectl describe pods sharevol
+    get into c1
+    kubectl exec -it sharevol -c c1 -- bash //create file in /tmp/xchange
+    kubectl exec -it sharevol -c c2 -- bash //you will see that file here in /tmp/data
+    ************************************************************************************ingress
+    
