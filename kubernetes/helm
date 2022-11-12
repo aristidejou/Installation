@@ -1,0 +1,23 @@
+//website for charts
+https://artifacthub.io 
+
+helm repo list // to list local repo 
+helm repo add bitnami https://charts.bitnami.com/bitnami  //add a repo in your list of repo  (bitnami=name for the repo   and url to download)
+helm search repo ngix // find repo nginx
+
+kubens web or kubectl create ns web  //to create a namaespace
+
+helm install nginx1 bitnami/nginx               //install chart
+====================================================================
+helm create papa
+helm install papa1 papa 
+helm uninstall papa1
+*to pachage the chart 
+cd papa
+helm package .
+you get papa-0.1.0.tgz you can share the new modified chart with friend
+helm install papa2 test-0.1.0.tgz // to install that new chart
+
+helm install papa1 --dry-run .  // just to see how everything is
+helm install papa1 --dry-run --set resources.limits.cpu="120m" .
+===============================================================
