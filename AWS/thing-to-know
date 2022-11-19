@@ -1,0 +1,20 @@
+DOCKER
+
+-container
+Way to package application with all the necessary dependencies and configuration(easy to share and moved around)
+build with images layers
+running environment for image
+
+-where they live? 
+container repository , private repository, public repository (dockerhub)
+
+-docker(light,faster)  
+*app
+os
+hardware
+
+-virtual machine (compatibility)
+*app
+*os
+hardware
+
